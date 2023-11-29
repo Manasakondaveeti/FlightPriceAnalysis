@@ -308,7 +308,13 @@ catch (Exception e)
         return null;
     }
 
+    public boolean isWithinTimeWindow(long timestamp) {
+        long currentTime = System.currentTimeMillis();
+        long timeDifference = currentTime - timestamp;
+        long timeWindow = 5 * 60 * 1000; // 5 minutes in milliseconds
 
+        return timeDifference < timeWindow;
+    }
 
     public static int minDistance(String firstWrd, String secondWrd) {
 

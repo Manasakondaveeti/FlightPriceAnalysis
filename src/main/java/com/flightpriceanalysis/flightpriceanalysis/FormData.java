@@ -56,4 +56,10 @@ public class FormData {
     public void setdestination(String destination) {
         this.destination = destination;
     }
+
+    @Override
+    public String toString() {
+        // Convert FormData to a unique string representation
+        return source + "-" + destination + "-" + date +"-" + noofpersons + "-" + classtype;
+    }
 }
