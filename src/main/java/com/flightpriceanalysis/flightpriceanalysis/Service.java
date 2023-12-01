@@ -1,5 +1,7 @@
 package com.flightpriceanalysis.flightpriceanalysis;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -106,7 +108,9 @@ public class Service {
 
 
     private  Document request(String next_link2, ArrayList<String> v) throws Exception {
-
+        //htmlParsefunction(next_link2);
+        List<String> ret = htmlParsefunction(next_link2);
+        constructTrie(next_link2, ret);
         WebDriver webDriver = new ChromeDriver();
         webDriver.get(next_link2);
         // Create a WebDriverWait for the page to load completely
@@ -174,7 +178,7 @@ public class Service {
     public  void findpatternusingregex(String src) {
        Map<String, String> map=new HashMap<>();
        List<String> list=new ArrayList<>();
-        String pricePattern = "C\\$\\s*(\\d+)\\s+/\\s+person";
+        String pricePattern = "C\\$\\s*(\\d+)\\s";
 
         // Compile the regex pattern
         Pattern pattern = Pattern.compile(pricePattern);
@@ -283,6 +287,7 @@ catch (Exception e)
 
 
 
+
     //Function to parse HTML file and store in an Array
     static Set<String> htmlParse (){
         //fetching document
@@ -299,6 +304,7 @@ catch (Exception e)
                 //deleting non alphanumeric characters
                 name.add(str[i].replaceAll("[^\\w]", "").toLowerCase());
             }
+            System.out.println("htmlparse"+name);
             //System.out.println("Length of string is: "+ str.length);
             return name;
         } catch (IOException e) {
@@ -308,6 +314,33 @@ catch (Exception e)
         return null;
     }
 
+
+    static List<String> htmlParsefunction(String url) {
+        //Document doc;
+        Document doc;
+        //adding try block to check for exceptions
+        try {
+            doc = Jsoup.connect(url)
+            .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36")
+                    .get();
+            String body = doc.body().text();
+            //adding words in an array
+            String[] str =  body.split("\\s+");
+            List<String> name = new ArrayList<String>();
+            for (int i = 0; i < str.length; i++) {
+                //deleting non alphanumeric characters
+                name.add(str[i].replaceAll("[^\\w]", "").toLowerCase());
+            }
+            System.out.println("Length of string is: "+ str.length);
+            System.out.println("Words are:" +name);
+            System.out.println("The number of words are:" +name.size());
+            return name;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
     public boolean isWithinTimeWindow(long timestamp) {
         long currentTime = System.currentTimeMillis();
         long timeDifference = currentTime - timestamp;
@@ -345,5 +378,69 @@ catch (Exception e)
             }
         }
         return editDist[x][y];
+
+
+   }
+
+    static TrieST<Map<String, Integer>> wordTrie = new TrieST<>();
+
+    static void constructTrie(String filename, List<String> words) {
+        HashMap<String, Integer> wordFreq = new HashMap<String, Integer>();
+        for(String word: words) {
+            if(!wordFreq.containsKey(word)) {
+                wordFreq.put(word,  1);
+            } else {
+                Integer x = wordFreq.get(word);
+                wordFreq.replace(word, x+1);
+            }
+        }
+
+        for(String key: wordFreq.keySet()) {
+            if(!wordTrie.contains(key)) {
+                HashMap<String, Integer> rowMap = new HashMap<String, Integer>();
+                rowMap.put(filename, wordFreq.get(key));
+                wordTrie.put(key, rowMap);
+            }
+        }
+
+        for (String key : wordTrie.keys()) {
+            System.out.println(key + " " + wordTrie.get(key));
+        }
+
+    }
+
+
+
+    public  void searcheachlocationfreq()
+    {
+        TreeMap<String, Integer> websiteFrequencyMap = new TreeMap<>();
+
+        try {
+            String filePath="F:\\SpringProject\\GITREPO\\flightpriceanalysis\\src\\search_frequency.txt";
+            // Read searches from the file
+            File file = new File(filePath);
+            Scanner fileScanner = new Scanner(file);
+
+            while (fileScanner.hasNext()) {
+                String website = fileScanner.next();
+                websiteFrequencyMap.put(website, websiteFrequencyMap.getOrDefault(website, 0) + 1);
+            }
+
+            // Display the frequency of each website
+            System.out.println("Website Search Frequencies:");
+            for (String website : websiteFrequencyMap.keySet()) {
+                int frequency = websiteFrequencyMap.get(website);
+                System.out.println(website + ": " + frequency + " searches");
+            }
+
+            fileScanner.close();
+        } catch (FileNotFoundException e) {
+            System.err.println("Error reading the file: " + e.getMessage());
+        }
+        catch(Exception e)
+        {
+            e.getMessage();
+        }
+
     }
 }

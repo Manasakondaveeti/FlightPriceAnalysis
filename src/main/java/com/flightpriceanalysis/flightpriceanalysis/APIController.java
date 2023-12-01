@@ -47,6 +47,7 @@ public class APIController {
             if (cache.containsKey(data.toString()) && service.isWithinTimeWindow(cache.get(data.toString()).getTimestamp())) {
                 String resp= cache.get(data.toString()).getResponse();
                 System.out.println(resp);
+                service.searcheachlocationfreq();
                 return ResponseEntity.ok(resp);
             } else {
 
@@ -55,9 +56,10 @@ public class APIController {
                 System.out.println(list);
                 String jsonResponse = objectMapper.writeValueAsString(list);
                 cache.put(data.toString(), new CacheEntry(jsonResponse, System.currentTimeMillis()));
-
+                service.searcheachlocationfreq();
                 return ResponseEntity.ok(jsonResponse);
             }
+
         }
         catch (Exception e) {
 
