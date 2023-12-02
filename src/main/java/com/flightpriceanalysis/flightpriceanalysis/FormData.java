@@ -19,11 +19,8 @@ public class FormData {
     }
 
     public void setdate(String date) {
-        if (validateDate(date)) {
             this.date = date;
-        } else {
-            throw new IllegalArgumentException("Invalid date format. Please use YYYY-MM-DD format.");
-        }
+
     }
 
     private boolean validateDate(String date) {
@@ -37,11 +34,10 @@ public class FormData {
     }
 
     public void setnoofpersons(Integer noofpersons) {
-        if (noofpersons >= MIN_PERSONS) {
+
             this.noofpersons = noofpersons;
-        } else {
-            throw new IllegalArgumentException("Number of persons should be greater than or equal to " + MIN_PERSONS);
-        }
+
+
     }
 
     public String getclasstype() {
@@ -49,11 +45,8 @@ public class FormData {
     }
 
     public void setclasstype(String classtype) {
-        if (validateClassType(classtype)) {
-            this.classtype = classtype;
-        } else {
-            throw new IllegalArgumentException("Invalid class type. Available options: Economy, Business, First");
-        }
+           this.classtype = classtype;
+
     }
 
     private boolean validateClassType(String classtype) {
@@ -67,11 +60,8 @@ public class FormData {
     }
 
     public void setsource(String source) {
-        if (validateSourceDest(source)) {
-            this.source = source;
-        } else {
-            throw new IllegalArgumentException("Invalid source format. Should contain only alphabetic characters and spaces.");
-        }
+          this.source = source;
+
     }
 
     public String getdestination() {
@@ -79,17 +69,44 @@ public class FormData {
     }
 
     public void setdestination(String destination) {
-        if (validateSourceDest(destination)) {
+
             this.destination = destination;
-        } else {
-            throw new IllegalArgumentException("Invalid destination format. Should contain only alphabetic characters and spaces.");
-        }
+
+
     }
 
     private boolean validateSourceDest(String input) {
         Pattern pattern = Pattern.compile(SOURCE_DEST_REGEX);
         Matcher matcher = pattern.matcher(input);
         return matcher.matches();
+    }
+
+    public void validationofdata()
+    {
+        if (!validateSourceDest(destination)) {
+            throw new IllegalArgumentException("Invalid destination format. Should contain only alphabetic characters and spaces.");
+
+        }
+
+        if (!validateSourceDest(source)) {
+
+            throw new IllegalArgumentException("Invalid source format. Should contain only alphabetic characters and spaces.");
+        }
+
+        if (!validateClassType(classtype)) {
+
+            throw new IllegalArgumentException("Invalid class type. Available options: Economy, Premium Economy");
+        }
+
+        if (!(noofpersons >= MIN_PERSONS)) {
+
+            throw new IllegalArgumentException("Number of persons should be greater than or equal to " + MIN_PERSONS);
+        }
+
+        if (!validateDate(date)) {
+
+            throw new IllegalArgumentException("Invalid date format. Please use YYYY-MM-DD format.");
+        }
     }
 
     @Override

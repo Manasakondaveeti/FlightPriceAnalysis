@@ -46,10 +46,12 @@ public class APIController {
     @PostMapping("/api/submissionform/submit")
 
     public ResponseEntity<?> onformSubmission(@RequestBody FormData data) {
+
         System.out.println(data.getsource());
         System.out.println(data.getdestination() + data.getnoofpersons() + data.getclasstype() + data.getdate());
 
         try {
+            data.validationofdata();
             // Check if the request is in the cache and within the time window
             if (cache.containsKey(data.toString()) && AvoidCrawling5Minutes.isWithinTimeWindow(cache.get(data.toString()).getTimestamp())) {
                 String resp = cache.get(data.toString()).getResponse();
