@@ -31,7 +31,8 @@ public class Service {
 
     Map<String, String> citiesCodes = new HashMap<String, String>();
      List<Map<String,String>> listofflight;
-   public void initialLoadofWordcheck()
+
+    public void initialLoadofWordcheck()
     {
 
 
@@ -39,6 +40,11 @@ public class Service {
         citiesCodes.put("toronto", "yto");
         citiesCodes.put("montreal", "yul");
         citiesCodes.put("vancouver", "yvr");
+        citiesCodes.put("paris", "cdg");
+        citiesCodes.put("new york", "jfk");
+        citiesCodes.put("bengaluru", "blr");
+        citiesCodes.put("bangalore", "blr");
+        citiesCodes.put("hyderabad", "hyd");
     }
 
     public List<Map<String,String>> getflightsCheap(FormData data) throws Exception
@@ -46,12 +52,12 @@ public class Service {
         listofflight=new ArrayList<>();
 
         initialLoadofWordcheck();
-        String url,url2="";
-        System.setProperty("webdriver.chrome.driver", "F:\\MAC Program\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
+        String url,url2,url3;
+        System.setProperty("webdriver.chrome.driver", "/Users/aman17/Downloads/chromedriver-mac-x64/chromedriver");
 
         Date date=(new SimpleDateFormat("yyyy-MM-dd").parse(data.getdate()));
         System.out.println(date);
-        if(data.getclasstype().equals("economy") ) {
+        if(data.getclasstype().equalsIgnoreCase("economy") ) {
             System.out.println(data.getsource().toLowerCase());
             System.out.println(citiesCodes);
             System.out.println(citiesCodes.get(data.getsource().toLowerCase()));
@@ -60,17 +66,21 @@ public class Service {
                     (new SimpleDateFormat("yyyy-MM-dd").format(date)) + "/" + data.getnoofpersons() + "adults?" + "sort=bestflight_a";
             url2 = "https://www.cheapoair.ca/air/listing?&d1="+ citiesCodes.get(data.getsource().toLowerCase())+"&r1="+citiesCodes.get(data.getdestination().toLowerCase() )+"&dt1="+
                     (new SimpleDateFormat("MM/dd/yyyy").format(date))+"&tripType=ONEWAYTRIP&cl="+data.getclasstype()+"&ad="+data.getnoofpersons()+"&se=0&ch=0&infs=0&infl=0";
+            url3 = "https://flights.agoda.com/flights/" + citiesCodes.get(data.getsource().toLowerCase()) + "-" + citiesCodes.get(data.getdestination().toLowerCase()) + "/"
+                    + (new SimpleDateFormat("yyyy-MM-dd").format(date)) + "/" + data.getnoofpersons() + "adults?sort=price_a";
         }
             else {
             url = "https://www.ca.kayak.com/flights/" +  citiesCodes.get(data.getsource().toLowerCase()) + "-" + citiesCodes.get(data.getdestination().toLowerCase() ) + "/" +
                     (new SimpleDateFormat("yyyy-MM-dd").format(date) ) + "/premium/" + data.getnoofpersons() + "adults?" + "sort=bestflight_a";
             url2 = "https://www.cheapoair.ca/air/listing?&d1=" +  citiesCodes.get(data.getsource().toLowerCase()) + "&r1=" + citiesCodes.get(data.getdestination().toLowerCase() ) + "&dt1=" +
                     (new SimpleDateFormat("MM/dd/yyyy").format(date)) + "&tripType=ONEWAYTRIP&cl=" + "PREMIUMECONOMY" + "&ad=" + data.getnoofpersons() + "&se=0&ch=0&infs=0&infl=0";
-
+            url3 = "https://flights.agoda.com/flights/" + citiesCodes.get(data.getsource().toLowerCase()) + "-" + citiesCodes.get(data.getdestination().toLowerCase()) + "/"
+                    + (new SimpleDateFormat("yyyy-MM-dd").format(date)) + "/premium/" + data.getnoofpersons() + "adults?sort=price_a";
         }
         List<String> urls = new ArrayList<String>();
-       urls.add(url);
+        urls.add(url);
         urls.add(url2);
+        urls.add(url3);
         crawlUrls(2, urls, new ArrayList<String>());
        // Document document = Jsoup.connect(url).get();
       // document.text();
@@ -134,7 +144,28 @@ public class Service {
 
 
             wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete';"));
+        }
 
+        if(next_link2.contains("agoda")) {
+
+            //wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete';"));
+
+            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div.sIC5-currency-picker")));
+            element.click();
+
+            wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+
+            element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.chXn-content")));
+
+            element = element.findElement(By.xpath("//button[contains(div, 'Canadian dollar')]"));
+            element.click();
+
+            wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete';"));
+
+//            element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[.//span[contains(text(),'Cheapest')]]")));
+//            element.click();
+//
+//            wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete';"));
         }
 
 
@@ -146,17 +177,19 @@ public class Service {
         // Use the text() method to get the plain text
         String textContent = document.text().replaceAll("\\p{Zs}", " ");
 
-       // System.out.println(pageText);
-       // System.out.println(textContent);
+        System.out.println(pageText);
+        System.out.println(textContent);
         String filepath="";
          if(next_link2.contains("kayak")) {
              filepath = "src\\kayak.txt";
              findpatternusingregex(textContent);
          } else if (next_link2.contains("cheapoair")) {
-
-
-             filepath = "src\\cheapoair.txt";
-             findpatternusingregexcheapoair(textContent);
+            filepath = "src\\cheapoair.txt";
+            findpatternusingregexcheapoair(textContent);
+         }
+         else if (next_link2.contains("agoda")) {
+            filepath = "src\\agoda.txt";
+            findpatternusingregexagoda(textContent);
          }
         // Save HTML content to a text file
         try (FileWriter writer = new FileWriter(filepath)) {
@@ -167,10 +200,6 @@ public class Service {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
-
         return null;
 
     }
@@ -218,6 +247,30 @@ public class Service {
         System.out.println(list);
         map.put("price",list.get(0));
         map.put("website","cheapoair");
+
+        listofflight.add(map);
+
+    }
+
+    public  void findpatternusingregexagoda(String src) {
+        Map<String, String> map=new HashMap<>();
+        List<String> list=new ArrayList<>();
+        String pricePattern = "C\\$\\s*(\\d+)";
+
+        // Compile the regex pattern
+        Pattern pattern = Pattern.compile(pricePattern);
+
+        // Match the pattern against the input string
+        Matcher matcher = pattern.matcher(src);
+
+        // Extract and print the matched price
+        while (matcher.find()) {
+            list.add( matcher.group());
+        }
+        Collections.sort(list);
+        System.out.println(list);
+        map.put("price",list.get(0));
+        map.put("website","agoda");
 
         listofflight.add(map);
 
