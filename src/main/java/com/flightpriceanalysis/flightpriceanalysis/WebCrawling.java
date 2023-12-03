@@ -33,7 +33,7 @@ public class WebCrawling {
 
             Date date=(new SimpleDateFormat("yyyy-MM-dd").parse(data.getdate()));
             System.out.println(date);
-            if(data.getclasstype().equalsIgnoreCase("economy") ) {
+            if(!data.getclasstype().equalsIgnoreCase("premium") ) {
                 System.out.println(data.getsource().toLowerCase());
                 System.out.println(citiesCodes);
                 System.out.println(citiesCodes.get(data.getsource().toLowerCase()));

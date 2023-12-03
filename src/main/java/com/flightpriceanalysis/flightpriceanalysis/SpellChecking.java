@@ -99,10 +99,12 @@ public class SpellChecking {
             if(distance <=2) {
                 resultsArray.add(word);
             }
-            else
-            {
-                throw new Exception("no relevant words were found..edit distance is more than 2");
-            }
+
+        }
+
+        if(resultsArray.isEmpty())
+        {
+            throw new Exception("no relevant words were found..edit distance is more than 2");
         }
 
         //Printing list of similar words

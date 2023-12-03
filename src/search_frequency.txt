@@ -1,4 +1,9 @@
-Toronto
-Vancouver
-Montreal
-Windsor
+toronto
+vancouver
+montreal
+windsor
+toronto
+toronto
+toronto
+toronto
+vancouver

@@ -19,7 +19,7 @@ public class FormData {
     }
 
     public void setdate(String date) {
-            this.date = date;
+        this.date = date;
 
     }
 
@@ -35,7 +35,7 @@ public class FormData {
 
     public void setnoofpersons(Integer noofpersons) {
 
-            this.noofpersons = noofpersons;
+        this.noofpersons = noofpersons;
 
 
     }
@@ -45,7 +45,7 @@ public class FormData {
     }
 
     public void setclasstype(String classtype) {
-           this.classtype = classtype;
+        this.classtype = classtype;
 
     }
 
@@ -60,7 +60,7 @@ public class FormData {
     }
 
     public void setsource(String source) {
-          this.source = source;
+        this.source = source;
 
     }
 
@@ -70,7 +70,7 @@ public class FormData {
 
     public void setdestination(String destination) {
 
-            this.destination = destination;
+        this.destination = destination;
 
 
     }
@@ -81,8 +81,17 @@ public class FormData {
         return matcher.matches();
     }
 
-    public void validationofdata()
-    {
+    public void validationofdata() throws Exception {
+        if(source==null) throw new Exception("Please enter source");
+
+        if(destination==null) throw new Exception("Please enter destination");
+        if(classtype==null) throw new Exception("Please enter class");
+        if(noofpersons==null) throw new Exception("Please enter no of persons");
+        if(date==null) throw new Exception("Please enter date");
+
+
+
+
         if (!validateSourceDest(destination)) {
             throw new IllegalArgumentException("Invalid destination format. Should contain only alphabetic characters and spaces.");
 

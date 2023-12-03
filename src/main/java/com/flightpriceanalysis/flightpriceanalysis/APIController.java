@@ -72,7 +72,7 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            // e.printStackTrace();
+             e.printStackTrace();
 
              return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 
