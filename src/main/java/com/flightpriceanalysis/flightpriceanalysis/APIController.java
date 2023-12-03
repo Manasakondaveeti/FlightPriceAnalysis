@@ -27,19 +27,20 @@ public class APIController {
     }
 
     @GetMapping("/api/wordcheck/{data}")
-    public ResponseEntity<String> getData(@PathVariable("data") String data) {
+    public ResponseEntity<?> getData(@PathVariable("data") String data) {
         System.out.println("api entered");
 
         SpellChecking spellcheck =new SpellChecking();
         spellcheck.initialLoadofWordcheck();
-        String dataoutput = spellcheck.wordCheckmain(data);
-        System.out.println("data sent to ui" + dataoutput);
+
         try {
+            String dataoutput = spellcheck.wordCheckmain(data);
+            System.out.println("data sent to ui" + dataoutput);
             String jsonData = objectMapper.writeValueAsString(dataoutput);
             return ResponseEntity.ok(jsonData);
         } catch (Exception e) {
-
-            return ResponseEntity.ok(e.getMessage());
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -79,5 +80,23 @@ public class APIController {
         }
 
     }
+
+    @GetMapping("/api/wordCompletion/{data}")
+    public ResponseEntity<String> getAirportData(@PathVariable("data") String data) {
+        System.out.println("api entered" + data);
+
+        List<String> dataoutput = WordCompletion.wordCompletion(data);
+        System.out.println("data sent to ui" + dataoutput);
+
+        try {
+            String jsonData = objectMapper.writeValueAsString(dataoutput);
+            return ResponseEntity.ok(jsonData);
+        } catch (Exception e) {
+
+            return ResponseEntity.ok(e.getMessage());
+        }
+    }
+
+
 
 }

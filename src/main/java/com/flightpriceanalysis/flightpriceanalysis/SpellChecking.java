@@ -3,6 +3,8 @@ package com.flightpriceanalysis.flightpriceanalysis;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -29,7 +31,7 @@ public class SpellChecking {
         citiesCodes.put("hyderabad", "hyd");
     }
 
-    public String wordCheckmain(String src)
+    public String wordCheckmain(String src) throws Exception
     {
         if(!src.matches("[a-zA-Z_]+")){
             System.out.println("Invalid source");
@@ -56,7 +58,26 @@ public class SpellChecking {
         return fileword;
     }
 
-    public  String wordCheck(String indexWord) {
+    public Set<String> readFile()
+    {
+        String filePath = "src/search_frequency.txt"; // Replace with the actual path to your file
+        Set<String> lineSet = new HashSet<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lineSet.add(line.trim()); // Assuming you want to remove leading/trailing whitespaces
+            }
+
+
+
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading the file: " + e.getMessage());
+        }
+        return lineSet;
+    }
+
+    public  String wordCheck(String indexWord) throws Exception{
 
         //using array list to store the resulting list
         ArrayList<String> resultsArray = new ArrayList<String>();
@@ -67,7 +88,7 @@ public class SpellChecking {
         int minDistance = Integer.MAX_VALUE;
 
         //Parsed Array stored in Set
-        Set<String> wordsArray = htmlParse();
+        Set<String> wordsArray = readFile();
 
         for(String word : wordsArray) {
             int distance = minDistance(indexWord, word);
@@ -78,6 +99,10 @@ public class SpellChecking {
             if(distance <=2) {
                 resultsArray.add(word);
             }
+            else
+            {
+                throw new Exception("no relevant words were found..edit distance is more than 2");
+            }
         }
 
         //Printing list of similar words
@@ -87,30 +112,7 @@ public class SpellChecking {
         return word;
     }
 
-    static Set<String> htmlParse (){
-        //fetching document
-        String url = "http://www.citymayors.com/gratis/canadian_cities.html";
-        Document doc;
-        //adding try block to check for exceptions
-        try {
-            doc = Jsoup.connect(url).get();
-            String body = doc.body().text();
-            //adding words in an array
-            String[] str =  body.split("\\s+");
-            Set<String> name = new HashSet<>();
-            for (int i = 0; i < str.length; i++) {
-                //deleting non alphanumeric characters
-                name.add(str[i].replaceAll("[^\\w]", "").toLowerCase());
-            }
-            System.out.println("htmlparse"+name);
-            //System.out.println("Length of string is: "+ str.length);
-            return name;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 
     public static int minDistance(String firstWrd, String secondWrd) {
 
