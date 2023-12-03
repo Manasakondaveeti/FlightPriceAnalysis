@@ -67,8 +67,8 @@ public class WebCrawling {
             }
             List<String> urls = new ArrayList<String>();
             urls.add(url);
-          //  urls.add(url2);
-          //  urls.add(url3);
+            urls.add(url2);
+            urls.add(url3);
             crawlUrls(2, urls, new ArrayList<String>());
             // Document document = Jsoup.connect(url).get();
             // document.text();
@@ -160,14 +160,14 @@ public class WebCrawling {
             String filepath="";
             if(next_link2.contains("kayak")) {
                 filepath = "src\\kayak.txt";
-                findpat.findpatternusingregexkayak(textContent);
+                findpat.findpatternusingregex(textContent,"kayak");
             } else if (next_link2.contains("cheapoair")) {
                 filepath = "src\\cheapoair.txt";
-                findpat.findpatternusingregexcheapoair(textContent);
+                findpat.findpatternusingregex(textContent,"cheapoair");
             }
             else if (next_link2.contains("cheapflights")) {
                 filepath = "src\\cheapflights.txt";
-                findpat.findpatternusingregexcheapflights(textContent);
+                findpat.findpatternusingregex(textContent,"cheapflights");
             }
             // Save HTML content to a text file
             try (FileWriter writer = new FileWriter(filepath)) {

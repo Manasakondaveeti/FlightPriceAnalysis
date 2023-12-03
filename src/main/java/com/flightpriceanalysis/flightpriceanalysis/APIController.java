@@ -57,9 +57,22 @@ public class APIController {
             //System.out.println("sdasdasd"+cache.containsKey(data.toString()));
            // System.out.println("sdjasdhsjad"+AvoidCrawling5Minutes.isWithinTimeWindow(cache.get(data.toString()).getTimestamp()));
             System.out.println(!data.getwebcrawl());
-            if (cache.containsKey(data.toString()) && AvoidCrawling5Minutes.isWithinTimeWindow(cache.get(data.toString()).getTimestamp())) {
+            if ( cache.containsKey(data.toString()) && AvoidCrawling5Minutes.isWithinTimeWindow(cache.get(data.toString()).getTimestamp())) {
 
-
+              if((data.getwebcrawl())){
+                  List<Map<String, String>> list = webcrawl.getflightsCheap(data);
+                  System.out.println(list);
+                  String jsonResponse = objectMapper.writeValueAsString(list);
+//
+                  CacheEntry newCacheEntry = new CacheEntry();
+                  newCacheEntry.setFromCache(false);
+                  newCacheEntry.setTimestamp(System.currentTimeMillis());
+                  newCacheEntry.setResponse(ResponseEntity.ok(jsonResponse));
+                  cache.put(data.toString(), newCacheEntry);
+                  //System.out.println("madhu"+cache.get(data.toString()));
+                  SearchFrequency.searcheachlocationfreq();
+                  return ResponseEntity.ok(newCacheEntry);
+              }
                 ResponseEntity<String> resp = cache.get(data.toString()).getResponse();
                 CacheEntry cacheResponse = new CacheEntry();
                 cacheResponse.setFromCache(true);
