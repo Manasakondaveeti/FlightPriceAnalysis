@@ -11,9 +11,9 @@ public class FindingPatternsUsingRegex {
         if(website.contains("cheapoair"))patternString="C\\$(\\d+(\\.\\d+)?)\\sPrice per person";
         if(website.contains("cheapflights"))patternString="C\\$\\s*(\\d+)\\s";
 
-        Map<String, String> map=new TreeMap<>();
-        //List<String> list=new ArrayList<>();
-        TreeMap<Integer, String> priceMap = new TreeMap<>();
+        Map<String, String> map=new HashMap<>();
+        List<String> list=new ArrayList<>();
+
         // Compile the regex pattern
         Pattern pattern = Pattern.compile(patternString);
 
@@ -22,15 +22,14 @@ public class FindingPatternsUsingRegex {
 
         // Extract and print the matched price
         while (matcher.find()) {
-            String currentPriceStr = matcher.group();
-            int currentPriceInt = Integer.parseInt(currentPriceStr.replaceAll("[^0-9]", ""));
-            priceMap.put(currentPriceInt, currentPriceStr);
+            list.add( matcher.group());
         }
-        if(priceMap.isEmpty())throw new Exception("Unable to find values matching with pattern declared in " + website + " website");
+        if(list.isEmpty())throw new Exception("Unable to find values matching with pattern declared in " + website + " website");
 
-        System.out.println(priceMap.firstEntry().getValue());
-        map.put("price", priceMap.firstEntry().getValue());
-        map.put("website", website);
+        Collections.sort(list);
+        System.out.println(list);
+        map.put("price",list.get(0));
+        map.put("website",website);
 
         WebCrawling.listofflight.add(map);
 
