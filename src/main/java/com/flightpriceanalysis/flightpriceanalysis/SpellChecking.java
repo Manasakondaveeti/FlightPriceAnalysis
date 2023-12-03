@@ -46,13 +46,7 @@ public class SpellChecking {
             fileword = source + "\n";
             System.out.println(fileword);
             source = citiesCodes.get(source);
-            try {
-                Files.write(Paths.get("src/search_frequency.txt"), fileword.getBytes(), StandardOpenOption.APPEND);
-            }
-            catch (Exception e)
-            {
-                System.out.println("unable to write in search frequency.txt file");
-            }
+
         }
 
         return fileword;
@@ -60,7 +54,7 @@ public class SpellChecking {
 
     public Set<String> readFile()
     {
-        String filePath = "src/search_frequency.txt"; // Replace with the actual path to your file
+        String filePath = "src/destinations.txt"; // Replace with the actual path to your file
         Set<String> lineSet = new HashSet<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {

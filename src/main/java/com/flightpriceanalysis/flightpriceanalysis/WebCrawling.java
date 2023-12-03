@@ -12,6 +12,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.*;
@@ -27,6 +30,15 @@ public class WebCrawling {
             listofflight=new ArrayList<>();
             SpellChecking.initialLoadofWordcheck();
             citiesCodes=SpellChecking.citiesCodes;
+            try {
+                Files.write(Paths.get("src/search_frequency.txt"), (data.getsource().toLowerCase()+"\n").getBytes(), StandardOpenOption.APPEND);
+                Files.write(Paths.get("src/search_frequency.txt"), (data.getdestination().toLowerCase()+"\n").getBytes(), StandardOpenOption.APPEND);
+
+            }
+            catch (Exception e)
+            {
+                System.out.println("unable to write in search frequency.txt file");
+            }
 
             String url,url2,url3;
             System.setProperty("webdriver.chrome.driver", "F:\\MAC Program\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
@@ -55,8 +67,8 @@ public class WebCrawling {
             }
             List<String> urls = new ArrayList<String>();
             urls.add(url);
-            urls.add(url2);
-            urls.add(url3);
+          //  urls.add(url2);
+          //  urls.add(url3);
             crawlUrls(2, urls, new ArrayList<String>());
             // Document document = Jsoup.connect(url).get();
             // document.text();

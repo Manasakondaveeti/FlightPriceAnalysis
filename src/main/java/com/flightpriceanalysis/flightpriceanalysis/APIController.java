@@ -54,20 +54,36 @@ public class APIController {
         try {
             data.validationofdata();
             // Check if the request is in the cache and within the time window
+            //System.out.println("sdasdasd"+cache.containsKey(data.toString()));
+           // System.out.println("sdjasdhsjad"+AvoidCrawling5Minutes.isWithinTimeWindow(cache.get(data.toString()).getTimestamp()));
+            System.out.println(!data.getwebcrawl());
             if (cache.containsKey(data.toString()) && AvoidCrawling5Minutes.isWithinTimeWindow(cache.get(data.toString()).getTimestamp())) {
-                String resp = cache.get(data.toString()).getResponse();
+
+
+                ResponseEntity<String> resp = cache.get(data.toString()).getResponse();
+                CacheEntry cacheResponse = new CacheEntry();
+                cacheResponse.setFromCache(true);
+                cacheResponse.setResponse(resp);
+
+
                 System.out.println(resp);
                 SearchFrequency.searcheachlocationfreq();
-                return ResponseEntity.ok(resp);
+                return ResponseEntity.ok(cacheResponse);
             } else {
 
 
                 List<Map<String, String>> list = webcrawl.getflightsCheap(data);
                 System.out.println(list);
                 String jsonResponse = objectMapper.writeValueAsString(list);
-                cache.put(data.toString(), new CacheEntry(jsonResponse, System.currentTimeMillis()));
+//
+                CacheEntry newCacheEntry = new CacheEntry();
+                newCacheEntry.setFromCache(false);
+                newCacheEntry.setTimestamp(System.currentTimeMillis());
+                newCacheEntry.setResponse(ResponseEntity.ok(jsonResponse));
+                cache.put(data.toString(), newCacheEntry);
+                //System.out.println("madhu"+cache.get(data.toString()));
                 SearchFrequency.searcheachlocationfreq();
-                return ResponseEntity.ok(jsonResponse);
+                return ResponseEntity.ok(newCacheEntry);
             }
 
         } catch (Exception e) {

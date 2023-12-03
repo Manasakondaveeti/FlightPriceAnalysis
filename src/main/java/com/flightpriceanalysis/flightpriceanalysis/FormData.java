@@ -9,13 +9,24 @@ public class FormData {
     private String date;
     private String classtype;
 
+    private boolean webcrawl;
+
     private static final String DATE_REGEX = "^\\d{4}-\\d{2}-\\d{2}$"; // Regex for YYYY-MM-DD format
     private static final String SOURCE_DEST_REGEX = "^[a-zA-Z\\s]+$"; // Regex for alphabetic characters and spaces
-    private static final String CLASSTYPE_REGEX = "^(economy|premium economy)$"; // Regex for specific class types
+    private static final String CLASSTYPE_REGEX = "^(economy|premium economy|premiumeconomy)$"; // Regex for specific class types
     private static final int MIN_PERSONS = 1; // Minimum number of persons allowed
 
     public String getdate() {
         return date;
+    }
+    public void setwebcrawl(Boolean webcrawl)
+    {
+        this.webcrawl=webcrawl;
+
+    }
+    public boolean getwebcrawl()
+    {
+        return webcrawl;
     }
 
     public void setdate(String date) {
@@ -51,7 +62,7 @@ public class FormData {
 
     private boolean validateClassType(String classtype) {
         Pattern pattern = Pattern.compile(CLASSTYPE_REGEX);
-        Matcher matcher = pattern.matcher(classtype);
+        Matcher matcher = pattern.matcher(classtype.toLowerCase());
         return matcher.matches();
     }
 
