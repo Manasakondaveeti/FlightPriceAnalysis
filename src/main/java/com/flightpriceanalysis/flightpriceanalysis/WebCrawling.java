@@ -31,9 +31,8 @@ public class WebCrawling {
             SpellChecking.initialLoadofWordcheck();
             citiesCodes=SpellChecking.citiesCodes;
             try {
-                Files.write(Paths.get("/Users/aman17/Desktop/flightpriceanalysis/src/search_frequency.txt"), (data.getsource().toLowerCase()+"\n").getBytes(), StandardOpenOption.APPEND);
-                Files.write(Paths.get("/Users/aman17/Desktop/flightpriceanalysis/src/search_frequency.txt"), (data.getdestination().toLowerCase()+"\n").getBytes(), StandardOpenOption.APPEND);
-
+                Files.write(Paths.get("src/search_frequency.txt"), (data.getsource().toLowerCase()+"\n").getBytes(), StandardOpenOption.APPEND);
+                Files.write(Paths.get("src/search_frequency.txt"), (data.getdestination().toLowerCase()+"\n").getBytes(), StandardOpenOption.APPEND);
             }
             catch (Exception e)
             {
@@ -41,8 +40,7 @@ public class WebCrawling {
             }
 
             String url,url2,url3;
-            System.setProperty("webdriver.chrome.driver", "/Users/aman17/Downloads/chromedriver-mac-x64/chromedriver");
-
+            System.setProperty("webdriver.chrome.driver", "F:\\MAC Program\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
             Date date=(new SimpleDateFormat("yyyy-MM-dd").parse(data.getdate()));
             System.out.println(date);
             if(data.getclasstype().equalsIgnoreCase("economy") ) {
@@ -106,7 +104,7 @@ public class WebCrawling {
 
 
         private  Document request(String next_link2, ArrayList<String> v) throws Exception {
-try{
+
             List<String> ret =HtmlParsing.htmlParsefunction(next_link2);
             InvertedIndexing.constructTrie(next_link2, ret);
 
@@ -170,7 +168,7 @@ try{
                 findpat.findpatternusingregex(textContent,"cheapflights");
             }
             // Save HTML content to a text file
-            FileWriter writer = new FileWriter(filepath);
+            try(FileWriter writer = new FileWriter(filepath)){
                 // Write the HTML content to the text file
                 writer.write(textContent);
                 System.out.println("Text content saved to: " + filepath);
@@ -179,9 +177,7 @@ try{
                 throw new Exception(e.getMessage());
             }
 
-catch (Exception e) {
-    throw new Exception("check in website whether page displaying bot access..?");
-}
+
             return null;
 
         }
