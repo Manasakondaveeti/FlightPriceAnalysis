@@ -12,7 +12,7 @@ public class FindingPatternsUsingRegex {
         if(website.contains("cheapflights"))patternString="C\\$\\s*(\\d+)\\s";
 
         Map<String, String> map=new HashMap<>();
-        List<String> list=new ArrayList<>();
+        List<String> list=new LinkedList<>();
 
         // Compile the regex pattern
         Pattern pattern = Pattern.compile(patternString);
