@@ -68,6 +68,7 @@ public class APIController {
                   cache.put(data.toString(), newCacheEntry);
 
                   SearchFrequency.searcheachlocationfreq();
+                  FrequencyCount.count();
                   PageRanking pageRanking = new PageRanking();
                   pageRanking.rankWebPages(data.getsource());
                   pageRanking.rankWebPages(data.getdestination());
@@ -81,6 +82,7 @@ public class APIController {
 
                 System.out.println(resp);
                 SearchFrequency.searcheachlocationfreq();
+                FrequencyCount.count();
                 PageRanking pageRanking = new PageRanking();
                 pageRanking.rankWebPages(data.getsource());
                 pageRanking.rankWebPages(data.getdestination());
@@ -98,6 +100,7 @@ public class APIController {
                 newCacheEntry.setResponse(ResponseEntity.ok(jsonResponse));
                 cache.put(data.toString(), newCacheEntry);
                 SearchFrequency.searcheachlocationfreq();
+                FrequencyCount.count();
                 PageRanking pageRanking = new PageRanking();
                 pageRanking.rankWebPages(data.getsource());
                 pageRanking.rankWebPages(data.getdestination());

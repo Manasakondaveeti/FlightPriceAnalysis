@@ -40,7 +40,7 @@ public class WebCrawling {
             }
 
             String url,url2,url3;
-            System.setProperty("webdriver.chrome.driver", "F:\\MAC Program\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
+            System.setProperty("webdriver.chrome.driver", "/Users/aman17/Downloads/chromedriver-mac-x64/chromedriver");
             Date date=(new SimpleDateFormat("yyyy-MM-dd").parse(data.getdate()));
             System.out.println(date);
             if(data.getclasstype().equalsIgnoreCase("economy") ) {
@@ -136,7 +136,7 @@ public class WebCrawling {
 
             if(next_link2.contains("cheapflights")) {
 
-                WebElement element = webDriver.findElement(By.cssSelector(".Hv20-option[aria-label='Cheapest']"));
+                WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".Hv20-option[aria-label='Cheapest']")));
                 element.click();
 
                 wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete';"));

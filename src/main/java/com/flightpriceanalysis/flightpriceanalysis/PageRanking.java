@@ -23,7 +23,7 @@ public class PageRanking {
     // Main method to perform web page ranking
     public void rankWebPages(String inputKeywords) {
         // Directory containing the web pages
-        String webPagesDirectory = "src";
+        String webPagesDirectory = "/Users/aman17/Desktop/flightpriceanalysis";
         File folder = new File(webPagesDirectory);
 
         // Get all files from the directory
@@ -37,11 +37,6 @@ public class PageRanking {
             keywords.add(keyword.trim().toLowerCase());
         }
 
-        // Check if there are any keywords
-        if (keywords.isEmpty()) {
-            System.out.println("Please enter at least one keyword.");
-            return;
-        }
 
         // A Map to store the frequency of each keyword
         Map<String, Integer> keywordFrequencies = new HashMap<>();
@@ -66,7 +61,7 @@ public class PageRanking {
         // Print the top 10 web pages based on keyword matches
         System.out.println("Top web pages based on keyword matches:\n");
         List<WebPage> topPages = new ArrayList<>();
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < 10; i++) {
             if (pageHeap.isEmpty()) {
                 break;
             }
