@@ -9,21 +9,29 @@ public class FormData {
     private String date;
     private String classtype;
 
+    private boolean webcrawl;
+
     private static final String DATE_REGEX = "^\\d{4}-\\d{2}-\\d{2}$"; // Regex for YYYY-MM-DD format
     private static final String SOURCE_DEST_REGEX = "^[a-zA-Z\\s]+$"; // Regex for alphabetic characters and spaces
-    private static final String CLASSTYPE_REGEX = "^(economy|premium economy)$"; // Regex for specific class types
+    private static final String CLASSTYPE_REGEX = "^(economy|premium economy|premiumeconomy)$"; // Regex for specific class types
     private static final int MIN_PERSONS = 1; // Minimum number of persons allowed
 
     public String getdate() {
         return date;
     }
+    public void setwebcrawl(Boolean webcrawl)
+    {
+        this.webcrawl=webcrawl;
+
+    }
+    public boolean getwebcrawl()
+    {
+        return webcrawl;
+    }
 
     public void setdate(String date) {
-        if (validateDate(date)) {
-            this.date = date;
-        } else {
-            throw new IllegalArgumentException("Invalid date format. Please use YYYY-MM-DD format.");
-        }
+        this.date = date;
+
     }
 
     private boolean validateDate(String date) {
@@ -37,11 +45,10 @@ public class FormData {
     }
 
     public void setnoofpersons(Integer noofpersons) {
-        if (noofpersons >= MIN_PERSONS) {
-            this.noofpersons = noofpersons;
-        } else {
-            throw new IllegalArgumentException("Number of persons should be greater than or equal to " + MIN_PERSONS);
-        }
+
+        this.noofpersons = noofpersons;
+
+
     }
 
     public String getclasstype() {
@@ -49,16 +56,13 @@ public class FormData {
     }
 
     public void setclasstype(String classtype) {
-        if (validateClassType(classtype)) {
-            this.classtype = classtype;
-        } else {
-            throw new IllegalArgumentException("Invalid class type. Available options: Economy, Business, First");
-        }
+        this.classtype = classtype;
+
     }
 
     private boolean validateClassType(String classtype) {
         Pattern pattern = Pattern.compile(CLASSTYPE_REGEX);
-        Matcher matcher = pattern.matcher(classtype);
+        Matcher matcher = pattern.matcher(classtype.toLowerCase());
         return matcher.matches();
     }
 
@@ -67,11 +71,8 @@ public class FormData {
     }
 
     public void setsource(String source) {
-        if (validateSourceDest(source)) {
-            this.source = source;
-        } else {
-            throw new IllegalArgumentException("Invalid source format. Should contain only alphabetic characters and spaces.");
-        }
+        this.source = source;
+
     }
 
     public String getdestination() {
@@ -79,17 +80,53 @@ public class FormData {
     }
 
     public void setdestination(String destination) {
-        if (validateSourceDest(destination)) {
-            this.destination = destination;
-        } else {
-            throw new IllegalArgumentException("Invalid destination format. Should contain only alphabetic characters and spaces.");
-        }
+
+        this.destination = destination;
+
+
     }
 
     private boolean validateSourceDest(String input) {
         Pattern pattern = Pattern.compile(SOURCE_DEST_REGEX);
         Matcher matcher = pattern.matcher(input);
         return matcher.matches();
+    }
+
+    public void validationofdata() throws Exception {
+        if(source==null) throw new Exception("Please enter source");
+
+        if(destination==null) throw new Exception("Please enter destination");
+        if(classtype==null) throw new Exception("Please enter class");
+        if(noofpersons==null) throw new Exception("Please enter no of persons");
+        if(date==null) throw new Exception("Please enter date");
+
+
+
+
+        if (!validateSourceDest(destination)) {
+            throw new IllegalArgumentException("Invalid destination format. Should contain only alphabetic characters and spaces.");
+
+        }
+
+        if (!validateSourceDest(source)) {
+
+            throw new IllegalArgumentException("Invalid source format. Should contain only alphabetic characters and spaces.");
+        }
+
+        if (!validateClassType(classtype)) {
+
+            throw new IllegalArgumentException("Invalid class type. Available options: Economy, Premium Economy");
+        }
+
+        if (!(noofpersons >= MIN_PERSONS)) {
+
+            throw new IllegalArgumentException("Number of persons should be greater than or equal to " + MIN_PERSONS);
+        }
+
+        if (!validateDate(date)) {
+
+            throw new IllegalArgumentException("Invalid date format. Please use YYYY-MM-DD format.");
+        }
     }
 
     @Override
