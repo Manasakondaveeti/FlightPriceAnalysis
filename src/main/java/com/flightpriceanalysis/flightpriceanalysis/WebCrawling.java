@@ -106,7 +106,7 @@ public class WebCrawling {
 
 
         private  Document request(String next_link2, ArrayList<String> v) throws Exception {
-
+try{
             List<String> ret =HtmlParsing.htmlParsefunction(next_link2);
             InvertedIndexing.constructTrie(next_link2, ret);
 
@@ -170,14 +170,18 @@ public class WebCrawling {
                 findpat.findpatternusingregex(textContent,"cheapflights");
             }
             // Save HTML content to a text file
-            try (FileWriter writer = new FileWriter(filepath)) {
+            FileWriter writer = new FileWriter(filepath);
                 // Write the HTML content to the text file
                 writer.write(textContent);
                 System.out.println("Text content saved to: " + filepath);
 
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new Exception(e.getMessage());
             }
+
+catch (Exception e) {
+    throw new Exception("check in website whether page displaying bot access..?");
+}
             return null;
 
         }
