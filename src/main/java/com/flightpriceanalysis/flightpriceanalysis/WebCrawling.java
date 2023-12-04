@@ -31,8 +31,8 @@ public class WebCrawling {
             SpellChecking.initialLoadofWordcheck();
             citiesCodes=SpellChecking.citiesCodes;
             try {
-                Files.write(Paths.get("src/search_frequency.txt"), (data.getsource().toLowerCase()+"\n").getBytes(), StandardOpenOption.APPEND);
-                Files.write(Paths.get("src/search_frequency.txt"), (data.getdestination().toLowerCase()+"\n").getBytes(), StandardOpenOption.APPEND);
+                Files.write(Paths.get("/Users/aman17/Desktop/flightpriceanalysis/src/search_frequency.txt"), (data.getsource().toLowerCase()+"\n").getBytes(), StandardOpenOption.APPEND);
+                Files.write(Paths.get("/Users/aman17/Desktop/flightpriceanalysis/src/search_frequency.txt"), (data.getdestination().toLowerCase()+"\n").getBytes(), StandardOpenOption.APPEND);
 
             }
             catch (Exception e)
@@ -41,11 +41,11 @@ public class WebCrawling {
             }
 
             String url,url2,url3;
-            System.setProperty("webdriver.chrome.driver", "F:\\MAC Program\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
+            System.setProperty("webdriver.chrome.driver", "/Users/aman17/Downloads/chromedriver-mac-x64/chromedriver");
 
             Date date=(new SimpleDateFormat("yyyy-MM-dd").parse(data.getdate()));
             System.out.println(date);
-            if(!data.getclasstype().equalsIgnoreCase("premium") ) {
+            if(data.getclasstype().equalsIgnoreCase("economy") ) {
                 System.out.println(data.getsource().toLowerCase());
                 System.out.println(citiesCodes);
                 System.out.println(citiesCodes.get(data.getsource().toLowerCase()));

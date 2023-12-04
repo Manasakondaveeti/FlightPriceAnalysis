@@ -68,6 +68,9 @@ public class APIController {
                   cache.put(data.toString(), newCacheEntry);
 
                   SearchFrequency.searcheachlocationfreq();
+                  PageRanking pageRanking = new PageRanking();
+                  pageRanking.rankWebPages(data.getsource());
+                  pageRanking.rankWebPages(data.getdestination());
                   return ResponseEntity.ok(newCacheEntry);
               }
                 ResponseEntity<String> resp = cache.get(data.toString()).getResponse();
@@ -78,6 +81,9 @@ public class APIController {
 
                 System.out.println(resp);
                 SearchFrequency.searcheachlocationfreq();
+                PageRanking pageRanking = new PageRanking();
+                pageRanking.rankWebPages(data.getsource());
+                pageRanking.rankWebPages(data.getdestination());
                 return ResponseEntity.ok(cacheResponse);
             } else {
 
@@ -92,6 +98,9 @@ public class APIController {
                 newCacheEntry.setResponse(ResponseEntity.ok(jsonResponse));
                 cache.put(data.toString(), newCacheEntry);
                 SearchFrequency.searcheachlocationfreq();
+                PageRanking pageRanking = new PageRanking();
+                pageRanking.rankWebPages(data.getsource());
+                pageRanking.rankWebPages(data.getdestination());
                 return ResponseEntity.ok(newCacheEntry);
             }
 
