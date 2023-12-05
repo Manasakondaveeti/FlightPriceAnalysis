@@ -16,38 +16,11 @@ public class Tester {
     public static void main(String args[]) throws Exception
     {
 
-        System.setProperty("webdriver.chrome.driver", "F:\\MAC Program\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
+        String amt="C$338.95 ";
 
-        Document doc;
-        //adding try block to check for exceptions
-        WebDriver webDriver = new ChromeDriver();
-        webDriver.get("https://flights.agoda.com/flights/yto-yvr/2023-12-28/1adults?sort=price_a");
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
+       String regex="C\\$\\d{1,3}(,\\d{3})*(\\.\\d{2})?\\s";
+       System.out.println(amt.matches(regex));
 
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div.sIC5-currency-picker")));
-        element.click();
-
-        wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-
-        element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.chXn-content")));
-
-        element = element.findElement(By.xpath("//button[contains(div, 'Canadian dollar')]"));
-        element.click();
-
-             //   element.click();
-        wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete';"));
-
-
-
-    String pageText = webDriver.getPageSource();
-    //System.out.println(pageText);
-
-        Document document = Jsoup.parse(pageText);
-
-        // Use the text() method to get the plain text
-        String textContent = document.text().replaceAll("\\p{Zs}", " ");
-        System.out.println(textContent);
 
     }
 }

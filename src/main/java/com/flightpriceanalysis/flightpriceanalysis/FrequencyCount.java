@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class FrequencyCount {
     public static void count() {
 
-        String filepath = "/Users/aman17/Desktop/flightpriceanalysis/src";
+        String filepath = "src";
         try {
             Map<String, Integer> wordFrequencyMap = getWordFrequency(filepath);
 

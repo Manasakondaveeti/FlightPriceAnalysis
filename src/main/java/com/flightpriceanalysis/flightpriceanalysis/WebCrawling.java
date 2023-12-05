@@ -40,7 +40,7 @@ public class WebCrawling {
             }
 
             String url,url2,url3;
-            System.setProperty("webdriver.chrome.driver", "/Users/aman17/Downloads/chromedriver-mac-x64/chromedriver");
+            System.setProperty("webdriver.chrome.driver", "F:\\MAC Program\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
             Date date=(new SimpleDateFormat("yyyy-MM-dd").parse(data.getdate()));
             System.out.println(date);
             if(data.getclasstype().equalsIgnoreCase("economy") ) {

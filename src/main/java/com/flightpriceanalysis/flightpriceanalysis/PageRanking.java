@@ -23,7 +23,7 @@ public class PageRanking {
     // Main method to perform web page ranking
     public void rankWebPages(String inputKeywords) {
         // Directory containing the web pages
-        String webPagesDirectory = "/Users/aman17/Desktop/flightpriceanalysis";
+        String webPagesDirectory = "src";
         File folder = new File(webPagesDirectory);
 
         // Get all files from the directory

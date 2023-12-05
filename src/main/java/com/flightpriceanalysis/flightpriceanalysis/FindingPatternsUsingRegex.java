@@ -7,9 +7,10 @@ public class FindingPatternsUsingRegex {
 
     public void findpatternusingregex(String src, String website) throws Exception{
         String patternString="";
-        if(website.contains("kayak"))patternString="C\\$\\s*(\\d+)\\s";
-        if(website.contains("cheapoair"))patternString="C\\$(\\d+(\\.\\d+)?)\\sPrice per person";
-        if(website.contains("cheapflights"))patternString="C\\$\\s*(\\d+)\\s";
+        System.out.println(src);
+        if(website.contains("kayak"))patternString="C\\$\\s\\d{1,3}(,\\d{3})*(\\.\\d{2})?\\s";
+        if(website.contains("cheapoair"))patternString="C\\$\\d{1,3}(,\\d{3})*(\\.\\d{2})?\\sPrice per person";
+        if(website.contains("cheapflights"))patternString="C\\$\\s\\d{1,3}(,\\d{3})*(\\.\\d{2})?\\s";
 
         Map<String, String> map=new HashMap<>();
         List<String> list=new LinkedList<>();
