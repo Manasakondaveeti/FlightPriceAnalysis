@@ -16,9 +16,9 @@ public class Tester {
     public static void main(String args[]) throws Exception
     {
 
-        String amt="C$237.83 ";
+        String amt="C$150 hjk";
 
-       String regex="C\\$\\d{1,3}(,\\d{3})*(\\.\\d{2})?\\s";
+       String regex="\\sC\\$\\d{1,3}(,\\d{3})*(\\.\\d{2})?\\s?(?!OFF)";
        System.out.println(amt.matches(regex));
 
 

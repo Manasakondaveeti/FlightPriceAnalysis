@@ -6,34 +6,16 @@ import java.util.Map;
 
 public class Trie {
 
-
-    //    private final Trie[] children;
-//    private boolean isEndOfWord;
-//
-//    public Trie() {
-//        this.children = new Trie[26]; // Assuming only lowercase English letters
-//        this.isEndOfWord = false;
-//    }
-//
-//    public void insert(String word) {
-//        Trie node = this;
-//        for (char c : word.toCharArray()) {
-//            int index = c - 'a';
-//            if (node.children[index] == null) {
-//                node.children[index] = new Trie();
-//            }
-//            node = node.children[index];
-//        }
-//        node.isEndOfWord = true;
-//    }
-    private final Map<Character, Trie> children;
-    private boolean isEndOfWord;
+    private final Map<Character, Trie> children;//it associates characters with corresponding child Trie nodes.
+    //each character in a word is associated with a Trie node representing the continuation of the word
+    private boolean isEndOfWord; //This is declared as a flag to check if word has ended or not.
 
     public Trie() {
         this.children = new HashMap<>();
         this.isEndOfWord = false;
     }
 
+    // insert function is used to insert a word in a trie
     public void insert(String word) {
         Trie node = this;
         for (char c : word.toCharArray()) {
@@ -43,13 +25,14 @@ public class Trie {
         node.isEndOfWord = true;
     }
 
+    //this function return lis of words with given prefix
     public List<String> findWordsWithPrefix(String prefix) {
         List<String> words = new ArrayList<>();
         Trie node = this;
         for (char c : prefix.toCharArray()) {
             if (c == ' ') {
-                // If it's a space, consider it as a separate character
-                c = 'z' + 1; // Choose an index beyond 'z'
+                // If it's a space, it will consider it as a seperate character
+                c = 'z' + 1;
             }
             if (node.children.containsKey(c)) {
                 node = node.children.get(c);
@@ -57,7 +40,7 @@ public class Trie {
                 return words; // No words with the given prefix
             }
         }
-        findWords(node, prefix, words);
+        findWords(node, prefix, words);//it recursively look into all words starting with the prefix
         return words;
     }
 
@@ -75,7 +58,7 @@ public class Trie {
         }
     }
 
-
+    //Print function below is used to print all the words in a trie..
     public void printAllWords() {
         List<String> words = findWordsWithPrefix("");
         System.out.println("All inserted words in the trie:");

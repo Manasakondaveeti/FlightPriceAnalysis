@@ -6,29 +6,34 @@ import java.util.Map;
 
 public class InvertedIndexing {
 
-    static TrieST<Map<String, Integer>> wordTrie = new TrieST<>();
+    static TrieST<Map<String, Integer>> ht_wordTrie = new TrieST<>();
 
+    // Constructing_the_trie_for_given_filename_and_list
     static void constructTrie(String filename, List<String> words) {
-        HashMap<String, Integer> wordFreq = new HashMap<String, Integer>();
-        for(String word: words) {
-            if(!wordFreq.containsKey(word)) {
-                wordFreq.put(word,  1);
+        // HashMap_to_store_word_frequencies
+        HashMap<String, Integer> ht_wordFreq = new HashMap<String, Integer>();
+        for (String word : words) {
+            if (!ht_wordFreq.containsKey(word)) {
+                ht_wordFreq.put(word, 1);
             } else {
-                Integer x = wordFreq.get(word);
-                wordFreq.replace(word, x+1);
+                Integer x = ht_wordFreq.get(word);
+                ht_wordFreq.replace(word, x + 1);
             }
         }
 
-        for(String key: wordFreq.keySet()) {
-            if(!wordTrie.contains(key)) {
-                HashMap<String, Integer> rowMap = new HashMap<String, Integer>();
-                rowMap.put(filename, wordFreq.get(key));
-                wordTrie.put(key, rowMap);
+        // Building_the_inverted_index_for_words
+        for (String key : ht_wordFreq.keySet()) {
+            if (!ht_wordTrie.contains(key)) {
+                // HashMap_to_associate_filename_and_frequency
+                HashMap<String, Integer> ht_rowMap = new HashMap<String, Integer>();
+                ht_rowMap.put(filename, ht_wordFreq.get(key));
+                ht_wordTrie.put(key, ht_rowMap);
             }
         }
 
-        for (String key : wordTrie.keys()) {
-            System.out.println(key + " " + wordTrie.get(key));
+        // Printing_words_in_trie_with_associated_maps
+        for (String key : ht_wordTrie.keys()) {
+            System.out.println(key + " " + ht_wordTrie.get(key));
         }
 
     }

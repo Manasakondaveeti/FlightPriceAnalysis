@@ -23,6 +23,7 @@ public class FindingPatternsUsingRegex {
 
         // Extract and print the matched price
         while (matcher.find()) {
+
             list.add( matcher.group());
         }
         if(list.isEmpty())throw new Exception("Unable to find values matching with pattern declared in " + website + " website");

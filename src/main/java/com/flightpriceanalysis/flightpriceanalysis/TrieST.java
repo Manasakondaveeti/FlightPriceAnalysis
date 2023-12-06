@@ -1,52 +1,34 @@
 package com.flightpriceanalysis.flightpriceanalysis;
 
-
-
 public class TrieST<Value> {
-    private static final int R = 256;        // extended ASCII
+    private static final int HT_R = 256;        // extended_ASCII
 
+    private Node HT_root;      // root_of_trie
+    private int HT_N;          // number_of_keys_in_trie
 
-    private Node root;      // root of trie
-    private int N;          // number of keys in trie
-
-    // R-way trie node
+    // R-way_trie_node
     private static class Node {
         private Object val;
-        private Node[] next = new Node[R];
+        private Node[] next = new Node[HT_R];
     }
 
     public TrieST() {
     }
 
-    /**
-     * Initializes an empty string symbol table.
-     */
-
-    /**
-     * Returns the value associated with the given key.
-     * @param key the key
-     * @return the value associated with the given key if the key is in the symbol table
-     *     and <tt>null</tt> if the key is not in the symbol table
-     * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>
-     */
+    // Get_value_for_the_key
     @SuppressWarnings("unchecked")
     public Value get(String key) {
-        Node x = get(root, key, 0);
+        Node x = get(HT_root, key, 0);
         if (x == null) return null;
         return (Value) x.val;
     }
 
-    /**
-     * Does this symbol table contain the given key?
-     * @param key the key
-     * @return <tt>true</tt> if this symbol table contains <tt>key</tt> and
-     *     <tt>false</tt> otherwise
-     * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>
-     */
+    // Check_if_key_exists
     public boolean contains(String key) {
         return get(key) != null;
     }
 
+    /* Get_node_for_the_key */
     private Node get(Node x, String key, int d) {
         if (x == null) return null;
         if (d == key.length()) return x;
@@ -54,23 +36,17 @@ public class TrieST<Value> {
         return get(x.next[c], key, d+1);
     }
 
-    /**
-     * Inserts the key-value pair into the symbol table, overwriting the old value
-     * with the new value if the key is already in the symbol table.
-     * If the value is <tt>null</tt>, this effectively deletes the key from the symbol table.
-     * @param key the key
-     * @param val the value
-     * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>
-     */
+    // Insert_key-value_pair
     public void put(String key, Value val) {
         if (val == null) delete(key);
-        else root = put(root, key, val, 0);
+        else HT_root = put(HT_root, key, val, 0);
     }
 
+    // Recursive_put_operation
     private Node put(Node x, String key, Value val, int d) {
         if (x == null) x = new Node();
         if (d == key.length()) {
-            if (x.val == null) N++;
+            if (x.val == null) HT_N++;
             x.val = val;
             return x;
         }
@@ -79,68 +55,48 @@ public class TrieST<Value> {
         return x;
     }
 
-    /**
-     * Returns the number of key-value pairs in this symbol table.
-     * @return the number of key-value pairs in this symbol table
-     */
+    // Get_size_of_the_trie
     public int size() {
-        return N;
+        return HT_N;
     }
 
-    /**
-     * Is this symbol table empty?
-     * @return <tt>true</tt> if this symbol table is empty and <tt>false</tt> otherwise
-     */
+    // Check_if_trie_is_empty
     public boolean isEmpty() {
         return size() == 0;
     }
 
-    /**
-     * Returns all keys in the symbol table as an <tt>Iterable</tt>.
-     * To iterate over all of the keys in the symbol table named <tt>st</tt>,
-     * use the foreach notation: <tt>for (Key key : st.keys())</tt>.
-     * @return all keys in the sybol table as an <tt>Iterable</tt>
-     */
+    /* Get_all_keys_in_trie */
     public Iterable<String> keys() {
         return keysWithPrefix("");
     }
 
-    /**
-     * Returns all of the keys in the set that start with <tt>prefix</tt>.
-     * @param prefix the prefix
-     * @return all of the keys in the set that start with <tt>prefix</tt>,
-     *     as an iterable
-     */
+    /* Get_keys_with_a_certain_prefix */
     public Iterable<String> keysWithPrefix(String prefix) {
         Queue<String> results = new Queue<String>();
-        Node x = get(root, prefix, 0);
+        Node x = get(HT_root, prefix, 0);
         collect(x, new StringBuilder(prefix), results);
         return results;
     }
 
+    // Collect_keys_with_given_prefix
     private void collect(Node x, StringBuilder prefix, Queue<String> results) {
         if (x == null) return;
         if (x.val != null) results.enqueue(prefix.toString());
-        for (char c = 0; c < R; c++) {
+        for (char c = 0; c < HT_R; c++) {
             prefix.append(c);
             collect(x.next[c], prefix, results);
             prefix.deleteCharAt(prefix.length() - 1);
         }
     }
 
-    /**
-     * Returns all of the keys in the symbol table that match <tt>pattern</tt>,
-     * where . symbol is treated as a wildcard character.
-     * @param pattern the pattern
-     * @return all of the keys in the symbol table that match <tt>pattern</tt>,
-     *     as an iterable, where . is treated as a wildcard character.
-     */
+    /* Get_keys_that_match_a_pattern */
     public Iterable<String> keysThatMatch(String pattern) {
         Queue<String> results = new Queue<String>();
-        collect(root, new StringBuilder(), pattern, results);
+        collect(HT_root, new StringBuilder(), pattern, results);
         return results;
     }
 
+    // Collect_keys_that_match_a_given_pattern
     private void collect(Node x, StringBuilder prefix, String pattern, Queue<String> results) {
         if (x == null) return;
         int d = prefix.length();
@@ -150,7 +106,7 @@ public class TrieST<Value> {
             return;
         char c = pattern.charAt(d);
         if (c == '.') {
-            for (char ch = 0; ch < R; ch++) {
+            for (char ch = 0; ch < HT_R; ch++) {
                 prefix.append(ch);
                 collect(x.next[ch], prefix, pattern, results);
                 prefix.deleteCharAt(prefix.length() - 1);
@@ -163,23 +119,13 @@ public class TrieST<Value> {
         }
     }
 
-    /**
-     * Returns the string in the symbol table that is the longest prefix of <tt>query</tt>,
-     * or <tt>null</tt>, if no such string.
-     * @param query the query string
-     * @throws NullPointerException if <tt>query</tt> is <tt>null</tt>
-     * @return the string in the symbol table that is the longest prefix of <tt>query</tt>,
-     *     or <tt>null</tt> if no such string
-     */
+    // Get_the_longest_prefix_of_a_given_query
     public String longestPrefixOf(String query) {
-        int length = longestPrefixOf(root, query, 0, 0);
+        int length = longestPrefixOf(HT_root, query, 0, 0);
         return query.substring(0, length);
     }
 
-    // returns the length of the longest string key in the subtrie
-    // rooted at x that is a prefix of the query string,
-    // assuming the first d character match and we have already
-    // found a prefix match of length length
+    // Recursive_function_for_longest_prefix
     private int longestPrefixOf(Node x, String query, int d, int length) {
         if (x == null) return length;
         if (x.val != null) length = d;
@@ -188,19 +134,16 @@ public class TrieST<Value> {
         return longestPrefixOf(x.next[c], query, d+1, length);
     }
 
-    /**
-     * Removes the key from the set if the key is present.
-     * @param key the key
-     * @throws NullPointerException if <tt>key</tt> is <tt>null</tt>
-     */
+    // Delete_a_key_from_the_trie
     public void delete(String key) {
-        root = delete(root, key, 0);
+        HT_root = delete(HT_root, key, 0);
     }
 
+    // Recursive_function_to_delete_a_key
     private Node delete(Node x, String key, int d) {
         if (x == null) return null;
         if (d == key.length()) {
-            if (x.val != null) N--;
+            if (x.val != null) HT_N--;
             x.val = null;
         }
         else {
@@ -208,16 +151,14 @@ public class TrieST<Value> {
             x.next[c] = delete(x.next[c], key, d+1);
         }
 
-        // remove subtrie rooted at x if it is completely empty
         if (x.val != null) return x;
-        for (int c = 0; c < R; c++)
+        for (int c = 0; c < HT_R; c++)
             if (x.next[c] != null)
                 return x;
         return null;
     }
 
     /**
-     * Unit tests the <tt>TrieSET</tt> data type.
+     * Unit_tests_the_<tt>TrieSET</tt>_data_type.
      */
-
 }
