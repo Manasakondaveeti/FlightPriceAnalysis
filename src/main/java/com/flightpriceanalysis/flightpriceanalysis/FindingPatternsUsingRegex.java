@@ -9,7 +9,7 @@ public class FindingPatternsUsingRegex {
         String patternString="";
         System.out.println(src);
         if(website.contains("kayak"))patternString="C\\$\\s\\d{1,3}(,\\d{3})*(\\.\\d{2})?\\s";
-        if(website.contains("cheapoair"))patternString="\\sC\\$\\d{1,3}(,\\d{3})*(\\.\\d{2})?\\s";
+        if(website.contains("cheapoair"))patternString="\\sC\\$\\d{1,3}(,\\d{3})*(\\.\\d{2})?\\sPrice per person";
         if(website.contains("cheapflights"))patternString="C\\$\\s\\d{1,3}(,\\d{3})*(\\.\\d{2})?\\s";
 
         Map<String, String> map=new HashMap<>();
@@ -23,6 +23,7 @@ public class FindingPatternsUsingRegex {
 
         // Extract and print the matched price
         while (matcher.find()) {
+
 
             list.add( matcher.group());
         }
